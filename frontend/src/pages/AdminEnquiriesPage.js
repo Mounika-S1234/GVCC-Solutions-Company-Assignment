@@ -8,20 +8,20 @@ export default function AdminEnquiriesPage() {
   useEffect(() => {
     const fetchEnquiries = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/enquiries');
+        const res = await fetch('/api/enquiries', {
+          headers: {
+            "Authorization": `Bearer ${process.env.REACT_APP_ADMIN_TOKEN}`
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Unauthorized or failed request");
+        }
+
         const data = await res.json();
-
-        const enrichedData = await Promise.all(
-          data.map(async (e) => {
-            const prodRes = await fetch(`http://localhost:3001/api/products/${e.product_id}`);
-            const product = await prodRes.json();
-            return { ...e, productName: product.name };
-          })
-        );
-
-        setEnquiries(enrichedData);
+        setEnquiries(data.enquiries || data); // depending on backend response
       } catch (err) {
-        setError('Failed to fetch enquiries');
+        setError('Failed to fetch enquiries (Unauthorized or server error)');
       } finally {
         setLoading(false);
       }
@@ -51,7 +51,7 @@ export default function AdminEnquiriesPage() {
           <tbody>
             {enquiries.map((e) => (
               <tr key={e.id} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: '8px' }}>{e.productName || `ID: ${e.product_id}`}</td>
+                <td style={{ padding: '8px' }}>{e.product_name}</td>
                 <td style={{ padding: '8px' }}>{e.name}</td>
                 <td style={{ padding: '8px' }}>{e.email}</td>
                 <td style={{ padding: '8px' }}>{e.message}</td>

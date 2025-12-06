@@ -1,0 +1,37 @@
+
+### Get all products
+GET http://localhost:3001/api/products
+
+### Get product by ID
+GET http://localhost:3001/api/products/1
+
+### Search products (example: search for 'headphones')
+GET http://localhost:3001/api/products?search=headphones
+
+### Get all enquiries (admin)
+GET http://localhost:3001/api/enquiries
+Authorization: Bearer secret-token
+
+### Create new enquiry
+POST http://localhost:3001/api/enquiries
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "message": "I am interested in this product."
+}
+
+### Create another enquiry (example)
+POST http://localhost:3001/api/enquiries
+Content-Type: application/json
+
+{
+  "product_id": 2,
+  "name": "Alice Smith",
+  "email": "alice@example.com",
+  "phone": "9876543210",
+  "message": "Can you provide more details about this product?"
+}
